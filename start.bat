@@ -21,6 +21,9 @@ pip install -q -r requirements.txt
 REM Create data directory if it doesn't exist
 if not exist "data\" mkdir data
 
+REM Set Flask debug mode for development
+set FLASK_DEBUG=true
+
 REM Start the application
 echo Starting Flask application...
 echo Access the application at: http://localhost:5000

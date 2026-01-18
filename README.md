@@ -161,13 +161,35 @@ The application uses JSON file storage in the `data/` directory. All data is aut
 
 ## Configuration
 
-The application runs on `http://0.0.0.0:5000` by default. You can modify settings in `app.py`:
+### Development Mode
 
-```python
-app.run(debug=True, host='0.0.0.0', port=5000)
+The application runs on `http://0.0.0.0:5000` by default. Debug mode is controlled via the `FLASK_DEBUG` environment variable for security:
+
+```bash
+# Enable debug mode for development (automatic reload, detailed errors)
+export FLASK_DEBUG=true  # Linux/Mac
+set FLASK_DEBUG=true     # Windows
+
+# Disable debug mode for production (recommended)
+export FLASK_DEBUG=false # Linux/Mac
+set FLASK_DEBUG=false    # Windows
 ```
 
-For production deployment, set `debug=False` and consider using a production WSGI server like Gunicorn.
+The start scripts (`start.sh` and `start.bat`) automatically enable debug mode for development convenience.
+
+### Production Deployment
+
+For production deployment:
+
+1. **Disable debug mode**: Set `FLASK_DEBUG=false` or unset the variable
+2. **Use a production WSGI server** like Gunicorn or uWSGI:
+   ```bash
+   pip install gunicorn
+   gunicorn -w 4 -b 0.0.0.0:5000 app:app
+   ```
+3. **Use a reverse proxy** (Nginx or Apache) with HTTPS
+4. **Change the SECRET_KEY** to a strong random value
+5. **Consider using a proper database** instead of JSON files for better performance and reliability
 
 ## Future Enhancements
 
