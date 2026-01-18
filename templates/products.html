@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Products - Eman Bakery{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Add New Product</h2>
+    <form action="/api/products" method="POST">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label for="name">Product Name *</label>
+                <input type="text" id="name" name="name" required placeholder="e.g., Whole Wheat Bread">
+            </div>
+            <div class="form-group">
+                <label for="type">Type *</label>
+                <select id="type" name="type" required>
+                    <option value="">Select type...</option>
+                    <option value="white">White Bread</option>
+                    <option value="wheat">Wheat Bread</option>
+                    <option value="multigrain">Multigrain</option>
+                    <option value="sourdough">Sourdough</option>
+                    <option value="baguette">Baguette</option>
+                    <option value="roll">Rolls</option>
+                    <option value="specialty">Specialty</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price">Price (per unit) *</label>
+                <input type="number" id="price" name="price" step="0.01" required placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight *</label>
+                <input type="text" id="weight" name="weight" required placeholder="e.g., 500g, 1kg">
+            </div>
+        </div>
+        <button type="submit" class="btn">Add Product</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Product List</h2>
+    {% if products %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Weight</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>#{{ product.id }}</td>
+                <td><strong>{{ product.name }}</strong></td>
+                <td>{{ product.type | capitalize }}</td>
+                <td>${{ "%.2f" | format(product.price) }}</td>
+                <td>{{ product.weight }}</td>
+                <td>{{ product.created_at[:10] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No products yet. Add your first product above!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

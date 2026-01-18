@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Eman Bakery{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Total Products</h3>
+        <div class="value">{{ stats.total_products }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Total Inventory</h3>
+        <div class="value">{{ stats.total_inventory }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Total Customers</h3>
+        <div class="value">{{ stats.total_customers }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Pending Deliveries</h3>
+        <div class="value">{{ stats.pending_deliveries }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Completed Deliveries</h3>
+        <div class="value">{{ stats.completed_deliveries }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Welcome to Eman Bakery Distribution System</h2>
+    <p style="margin-bottom: 1rem;">This system helps you manage your bread distribution operations efficiently.</p>
+    
+    <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #667eea;">Features:</h3>
+    <ul style="list-style-position: inside; line-height: 2;">
+        <li><strong>Product Management:</strong> Define and manage different types of bread products</li>
+        <li><strong>Inventory Tracking:</strong> Track production batches, quantities, and expiry dates</li>
+        <li><strong>Customer Management:</strong> Maintain customer database with contact information</li>
+        <li><strong>Delivery Scheduling:</strong> Plan and track deliveries with status updates</li>
+        <li><strong>Real-time Statistics:</strong> Monitor your operations with live dashboard</li>
+    </ul>
+</div>
+
+{% if data.deliveries %}
+<div class="card">
+    <h2>Recent Deliveries</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Delivery Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for delivery in data.deliveries[-5:] | reverse %}
+            <tr>
+                <td>#{{ delivery.id }}</td>
+                <td>
+                    {% for customer in data.customers %}
+                        {% if customer.id == delivery.customer_id %}
+                            {{ customer.name }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for product in data.products %}
+                        {% if product.id == delivery.product_id %}
+                            {{ product.name }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ delivery.quantity }}</td>
+                <td>{{ delivery.delivery_date }}</td>
+                <td>
+                    <span class="badge badge-{{ delivery.status }}">{{ delivery.status | upper }}</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

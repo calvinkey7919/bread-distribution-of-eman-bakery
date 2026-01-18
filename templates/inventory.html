@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory - Eman Bakery{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Add Inventory</h2>
+    <form action="/api/inventory" method="POST">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label for="product_id">Product *</label>
+                <select id="product_id" name="product_id" required>
+                    <option value="">Select product...</option>
+                    {% for product in products %}
+                    <option value="{{ product.id }}">{{ product.name }} ({{ product.weight }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity *</label>
+                <input type="number" id="quantity" name="quantity" required placeholder="0">
+            </div>
+            <div class="form-group">
+                <label for="production_date">Production Date *</label>
+                <input type="date" id="production_date" name="production_date" required>
+            </div>
+            <div class="form-group">
+                <label for="expiry_date">Expiry Date *</label>
+                <input type="date" id="expiry_date" name="expiry_date" required>
+            </div>
+            <div class="form-group">
+                <label for="batch_number">Batch Number *</label>
+                <input type="text" id="batch_number" name="batch_number" required placeholder="e.g., BATCH-001">
+            </div>
+        </div>
+        <button type="submit" class="btn">Add to Inventory</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Current Inventory</h2>
+    {% if inventory %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Batch Number</th>
+                <th>Production Date</th>
+                <th>Expiry Date</th>
+                <th>Added</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in inventory %}
+            <tr>
+                <td>#{{ item.id }}</td>
+                <td>
+                    {% for product in products %}
+                        {% if product.id == item.product_id %}
+                            <strong>{{ product.name }}</strong>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.batch_number }}</td>
+                <td>{{ item.production_date }}</td>
+                <td>{{ item.expiry_date }}</td>
+                <td>{{ item.added_at[:10] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No inventory records yet. Add your first batch above!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

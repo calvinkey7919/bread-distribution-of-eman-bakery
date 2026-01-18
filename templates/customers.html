@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Customers - Eman Bakery{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Add New Customer</h2>
+    <form action="/api/customers" method="POST">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label for="name">Customer Name *</label>
+                <input type="text" id="name" name="name" required placeholder="John Doe">
+            </div>
+            <div class="form-group">
+                <label for="business_name">Business Name</label>
+                <input type="text" id="business_name" name="business_name" placeholder="Joe's Cafe">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+1234567890">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="customer@example.com">
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <label for="address">Address *</label>
+                <textarea id="address" name="address" required placeholder="Street, City, State, ZIP"></textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn">Add Customer</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Customer List</h2>
+    {% if customers %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Business</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>#{{ customer.id }}</td>
+                <td><strong>{{ customer.name }}</strong></td>
+                <td>{{ customer.business_name or '-' }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.email or '-' }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.created_at[:10] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No customers yet. Add your first customer above!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
