@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: #f9fafb;
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 80px; /* Space for bottom nav */
+  }
+}
